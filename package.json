@@ -1,9 +1,9 @@
 {
   "name": "ionic-scroll-sista",
-  "version": "1.0.4",
+  "version": "1.0.0",
   "description": "An Ionic plugin that will push your headers and tabs away while scrolling to free up more space",
   "author": "Devin Jett <djett41@gmail.com> (https://github.com/djett41)",
-  "main": "./dist/ionic-filter-bar.js",
+  "main": "./dist/ionic-scroll-sista.js",
   "engines": {
     "node": "*"
   },
