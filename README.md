@@ -5,6 +5,7 @@
  - [Demo](#demo)
  - [Setup](#setup)
  - [Usage](#usage)
+ - [Screenshots](#screenshots)
 
 ## Demo
 
@@ -72,3 +73,13 @@ Sista picks uses the correct scroll delegate
       </ion-content>
 
 
+## Screenshots
+
+<img src="demo/resources/screenshots/ios1.png" align="left" height="500" width="281" >
+<img src="demo/resources/screenshots/ios2.png" align="left" height="500" width="281" >
+<img src="demo/resources/screenshots/ios3.png" align="left" height="500" width="281" >
+
+
+<img src="demo/resources/screenshots/android1.png" align="left" height="500" width="281" >
+<img src="demo/resources/screenshots/android2.png" align="left" height="500" width="281" >
+<img src="demo/resources/screenshots/android3.png" align="left" height="500" width="281" >
