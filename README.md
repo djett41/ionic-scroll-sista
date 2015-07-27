@@ -1,5 +1,5 @@
 #Ionic Scroll Sista
->An Ionic plugin that will hide your header and tabs while scrolling a list
+>An Ionic plugin that will hide your header and tabs while scrolling a list to give users a little more room.  This plugin was inspired by [Ionic Header Shrink](https://github.com/driftyco/ionic-ion-header-shrink) however it doesn't seem that the repo is still maintained, not to mention it doesn't support the breaking changes from Ionic beta-14.
 
 ## Table of Contents
  - [Demo](#demo)
@@ -7,6 +7,10 @@
  - [Usage](#usage)
 
 ## Demo
+
+- Watch the Demo video below
+
+[![Ionic Scroll Sista](http://img.youtube.com/vi/_GCDup3X5vg/0.jpg)](http://www.youtube.com/watch?v=_GCDup3X5vg)
 
 - [View Demo](http://makeagif.com/i/EZ-klS)
 - Download from [Ionic View](http://view.ionic.io/) with appId: `474d3495`
@@ -44,6 +48,7 @@ will only push both header while scrolling, however you can also push your tabs 
 supplying the value `header-and-tabs`.
 
 Ionic Scroll Sista includes the following behavior
+  - Only JS scrolling currently supported (havent yet tested native scrolling) 
   - The header/tabs will hide while dragging/scrolling up, and show while dragging/scrolling down.
   - The header/tabs will show when you get to the bottom of the scroll view
   - iOS header/title/buttons will fade AND scale down like Instagram
