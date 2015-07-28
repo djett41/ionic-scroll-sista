@@ -1,52 +1,47 @@
-(function (angular) {
+/* global angular,ionic */
+(function (angular, ionic) {
   'use strict';
 
   angular.module('jett.ionic.scroll.sista', ['ionic'])
     .directive('scrollSista', function($document, $ionicScrollDelegate) {
       var TRANSITION_DURATION = '400ms';
-
-      /**
-       * translates an element along the y axis by the supplied value.  if duration is passed in,
-       * a transition duration is set
-       * @param element
-       * @param y
-       * @param duration
-       */
-      var translateY = function (element, y, duration) {
-        if (duration) {
-          element.style[ionic.CSS.TRANSITION_DURATION] = duration;
-        }
-        element.style[ionic.CSS.TRANSFORM] = 'translate3d(0, ' + y + 'px, 0)';
-      };
-
-      //although we could have 1 animate function and has the platform check there, it would seem silly to have to
-      //check the platform for every onScroll rather than just once, which is why they are split up.
-      var animate;
-      if (ionic.Platform.platform() === 'android') {
-        animate = function (element, fadeAmt) {
-          element.style.opacity = fadeAmt;
-        };
-      } else {
-        animate = function (element, fadeAmt) {
-          element.style.opacity = fadeAmt;
-          element.style[ionic.CSS.TRANSFORM] = 'scale(' + fadeAmt + ',' + fadeAmt + ')';
-        };
-      }
+      var scaleHeaderElements = ionic.Platform.isAndroid() ? false : true;
 
       return {
         restrict: 'A',
         link: function($scope, $element, $attr) {
-          var headerAndTabs = $attr.scrollSista === 'header-and-tabs';
           var body = $document[0].body;
           var scrollDelegate = $attr.delegateHandle ? $ionicScrollDelegate.$getByHandle($attr.delegateHandle) : $ionicScrollDelegate;
           var scrollView = scrollDelegate.getScrollView();
 
           //coordinates
-          var y, prevY, scrollDelay, prevScrollTop;
+          var y, prevY, prevScrollTop;
           //headers
           var cachedHeader, activeHeader, headerHeight, contentTop;
+          //subheader
+          var subHeader, subHeaderHeight;
           //tabs
-          var tabsHeight, animateTabs, hasTabsTop = false;
+          var tabs, tabsHeight, hasTabsTop = false, hasTabsBottom = false;
+
+          //y position that will indicate where specific elements should start and end their transition.
+          var headerStart = 0;
+          var tabsStart = 0;
+          var subheaderStart = 0;
+          var defaultEnd, headerEnd, tabsEnd, subheaderEnd;
+
+          /**
+           * translates an element along the y axis by the supplied value.  if duration is passed in,
+           * a transition duration is set
+           * @param element
+           * @param y
+           * @param duration
+           */
+          function translateY (element, y, duration) {
+            if (duration) {
+              element.style[ionic.CSS.TRANSITION_DURATION] = duration;
+            }
+            element.style[ionic.CSS.TRANSFORM] = 'translate3d(0, ' + (-y) + 'px, 0)';
+          }
 
           /**
            * Initializes y and scroll variables
@@ -55,11 +50,10 @@
             y = 0;
             prevY = 0;
             prevScrollTop = 0;
-            scrollDelay = 0.4;
           }
 
           /**
-           * Initializes headers and tabs
+           * Initializes headers, tabs, and subheader, and determines how they will transition on scroll
            */
           function initElements () {
             cachedHeader = body.querySelector('[nav-bar="cached"] .bar-header');
@@ -72,31 +66,59 @@
             headerHeight = activeHeader.offsetHeight;
             contentTop = headerHeight;
 
-            var tabs = body.querySelector('.tabs');
-            var tabsClasses;
-
+            //tabs
+            tabs = body.querySelector('.tabs');
             if (tabs) {
-              tabsClasses = tabs.parentNode.classList;
               tabsHeight = tabs.offsetHeight;
-
-              if (tabsClasses.contains('tabs-top')) {
+              if (tabs.parentNode.classList.contains('tabs-top')) {
                 hasTabsTop = true;
                 contentTop += tabsHeight;
-                if (headerAndTabs) {
-                  animateTabs = function (y, duration) {
-                    translateY(tabs, -y, duration);
-                  };
-                } else {
-                  animateTabs = function (y, duration) {
-                    translateY(tabs, Math.max(-headerHeight, -y), duration);
-                  };
-                }
-              } else if (tabsClasses.contains('tabs-bottom')) {
-                animateTabs = headerAndTabs && function (y, duration, contentStyle) {
-                    contentStyle.bottom = Math.max(0, tabsHeight - y) + 'px';
-                    translateY(tabs, Math.min(tabsHeight, y), duration);
-                  };
+              } else if (tabs.parentNode.classList.contains('tabs-bottom')) {
+                hasTabsBottom = true;
               }
+            }
+
+            //subheader
+            subHeader = body.querySelector('.bar-subheader');
+            if (subHeader) {
+              subHeaderHeight = subHeader.offsetHeight;
+              contentTop += subHeaderHeight;
+            }
+
+            //set default end for header/tabs elements to scroll out of the scroll view and set elements end to default
+            defaultEnd = contentTop * 2;
+            headerEnd = tabsEnd = subheaderEnd = defaultEnd;
+
+            //if tabs or subheader aren't available, set height to 0
+            tabsHeight = tabsHeight || 0;
+            subHeaderHeight = subHeaderHeight || 0;
+
+            switch($attr.scrollSista) {
+              case 'header':
+                subheaderEnd =  headerHeight;
+                tabsEnd = hasTabsTop ? headerHeight : 0;
+                break;
+              case 'header-tabs':
+                headerStart = hasTabsTop ? tabsHeight : 0;
+                subheaderEnd = hasTabsTop ? headerHeight + tabsHeight : headerHeight;
+                break;
+              case 'tabs-subheader':
+                headerEnd = 0;
+                headerStart = hasTabsTop ? contentTop - headerHeight : subHeaderHeight;
+                tabsStart = hasTabsTop ? subHeaderHeight : 0;
+                break;
+              case 'tabs':
+                headerEnd = 0;
+                subheaderEnd =  hasTabsTop ? tabsHeight : 0;
+                break;
+              case 'subheader':
+                headerEnd = 0;
+                tabsEnd = 0;
+                break;
+              //defaults to header-tabs-subheader
+              default:
+                headerStart = hasTabsTop ? contentTop - headerHeight : subHeaderHeight;
+                tabsStart = hasTabsTop ? subHeaderHeight : 0;
             }
           }
 
@@ -109,12 +131,15 @@
             var fadeAmt = 1 - (y / headerHeight);
 
             //translate active header
-            translateY(activeHeader, -y, duration);
+            translateY(activeHeader, y, duration);
             angular.forEach(activeHeader.children, function (child) {
-              animate(child, fadeAmt);
+              child.style.opacity = fadeAmt;
+              if (scaleHeaderElements) {
+                child.style[ionic.CSS.TRANSFORM] = 'scale(' + fadeAmt + ',' + fadeAmt + ')';
+              }
             });
             //translate cached header
-            translateY(cachedHeader, -y, duration);
+            translateY(cachedHeader, y, duration);
           }
 
           /**
@@ -124,20 +149,31 @@
            */
           function translateElements (y, duration) {
             var contentStyle = $element[0].style;
+            var headerY = y > headerStart ? y - headerStart : 0;
+            var tabsY, subheaderY;
 
             ionic.requestAnimationFrame(function() {
-              //If hasTabsTop we want the top tabs to slide in under the header first before the header slides out
-              if (headerAndTabs && hasTabsTop && y > 0) {
-                if (y >= tabsHeight) {
-                  translateHeaders(y - tabsHeight, duration);
-                }
-              } else {
-                translateHeaders(y, duration);
+              //subheader
+              if (subHeader) {
+                subheaderY =  y > subheaderStart ? y - subheaderStart : 0;
+                translateY(subHeader, Math.min(subheaderEnd, subheaderY), duration);
               }
 
-              if (animateTabs) {
-                animateTabs(y, duration, contentStyle);
+              //tabs
+              if (tabs) {
+                tabsY = Math.min(tabsEnd, y > tabsStart ? y - tabsStart : 0);
+
+                if (hasTabsBottom) {
+                  tabsY = -tabsY;
+                  contentStyle.bottom = Math.max(0, tabsHeight - y) + 'px';
+                }
+                translateY(tabs, tabsY, duration);
               }
+
+              //headers
+              translateHeaders(Math.min(headerEnd, headerY), duration);
+
+              //readjust top of ion-content
               contentStyle.top = Math.max(0, contentTop - y) + 'px';
             });
           }
@@ -170,7 +206,7 @@
             var duration = 0;
             var scrollTop = e.detail.scrollTop;
 
-            y = scrollTop >= 0 ? Math.min(headerHeight / scrollDelay, Math.max(0, y + scrollTop - prevScrollTop)) : 0;
+            y = scrollTop >= 0 ? Math.min(defaultEnd, Math.max(0, y + scrollTop - prevScrollTop)) : 0;
 
             //if we are at the bottom, animate the header/tabs back in
             if (scrollView.getScrollMax().top - scrollTop <= contentTop) {
@@ -193,4 +229,4 @@
       }
     });
 
-})(angular);
+})(angular, ionic);

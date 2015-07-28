@@ -10,7 +10,11 @@
     </button>
   </ion-nav-buttons>
 
-  <ion-content scroll-sista="header-and-tabs">
+  <div class="bar bar-subheader">
+    <h2 class="title">Sub Header</h2>
+  </div>
+
+  <ion-content scroll-sista="tabs-subheader" class="has-subheader">
 
     <ion-refresher pulling-icon="ion-arrow-down-b" on-refresh="refreshItems()">
     </ion-refresher>
