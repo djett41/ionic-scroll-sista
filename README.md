@@ -14,7 +14,6 @@
 
 [![Ionic Scroll Sista](http://img.youtube.com/vi/x3Htocx4acc/0.jpg)](http://www.youtube.com/watch?v=x3Htocx4acc)
 
-- [View Demo](http://makeagif.com/i/EZ-klS)
 - Download from [Ionic View](http://view.ionic.io/) with appId: `474d3495`
 
 
