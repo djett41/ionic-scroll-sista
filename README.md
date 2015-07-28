@@ -74,37 +74,37 @@ Ionic Scroll Sista includes the following behavior.
 
 ### Possible Values
 
-    - `scroll-sista="header-tabs-subheader"` (Default.  Same as just `scroll-sista`)
-        - For top tabs, the subheader will slide under the tabs, the tabs will slide under the header, and then the
-          header will slide out of the view.  At this point all elements are out of the view
-        - For bottom tabs, the subheader will slide under the header while the tabs slide out of the view,
-          then the header will slide out of the view.  At this point all elements are out of the view.
+  - `scroll-sista="header-tabs-subheader"` (Default.  Same as just `scroll-sista`)
+    - For top tabs, the subheader will slide under the tabs, the tabs will slide under the header, and then the
+      header will slide out of the view.  At this point all elements are out of the view
+    - For bottom tabs, the subheader will slide under the header while the tabs slide out of the view,
+      then the header will slide out of the view.  At this point all elements are out of the view.
 
-    - `scroll-sista="header-tabs"`
-        - For top tabs, the tabs will first slide under the header, then the header will slide out of the view.
-        - For bottom tabs, the tabs and header will slide out of the scroll view at the same time.
-        - If there is a subheader, the subheader will slide to the very top of the screen
+  - `scroll-sista="header-tabs"`
+    - For top tabs, the tabs will first slide under the header, then the header will slide out of the view.
+    - For bottom tabs, the tabs and header will slide out of the scroll view at the same time.
+    - If there is a subheader, the subheader will slide to the very top of the screen
 
-    - `scroll-sista="tabs-subheader"`
-        - For top tabs, the subheader will slide under the tabs, then the tabs will slide under the header.
-        - For bottom tabs, the tabs and subheader will slide out of the scroll view at the same time.
-        - The header will remain at the top of the screen
+  - `scroll-sista="tabs-subheader"`
+    - For top tabs, the subheader will slide under the tabs, then the tabs will slide under the header.
+    - For bottom tabs, the tabs and subheader will slide out of the scroll view at the same time.
+    - The header will remain at the top of the screen
 
-    - `scroll-sista="tabs"`
-        - For top tabs, the tabs will slide under the header.
-        - For bottom tabs, the tabs will slide out of the view.
-        - If a subheader is present WITH top tabs, the subheader will slide up with the tabs and now be right beneath
-          the header.  If tabs are bottom, the subheader will just stay put.
-        - The header won't move and will still be at the top of the screen.
+  - `scroll-sista="tabs"`
+    - For top tabs, the tabs will slide under the header.
+    - For bottom tabs, the tabs will slide out of the view.
+    - If a subheader is present WITH top tabs, the subheader will slide up with the tabs and now be right beneath
+      the header.  If tabs are bottom, the subheader will just stay put.
+    - The header won't move and will still be at the top of the screen.
 
-    - `scroll-sista="subheader"`
-        - The subheader will always slide under it's parent whether that's a header or top tabs.
-        - If tabs are available and at the bottom, they will not move.
+  - `scroll-sista="subheader"`
+    - The subheader will always slide under it's parent whether that's a header or top tabs.
+    - If tabs are available and at the bottom, they will not move.
 
-    - `scroll-sista="header"`
-        - The header only will slide out of the screen.
-        - Any elements beneath the header, whether a subheader or top tabs, or top tabs AND a subheader, will slide
-          to the very top of the screen
+  - `scroll-sista="header"`
+    - The header only will slide out of the screen.
+    - Any elements beneath the header, whether a subheader or top tabs, or top tabs AND a subheader, will slide
+      to the very top of the screen
 
 ## NOTES
 
