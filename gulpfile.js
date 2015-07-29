@@ -8,6 +8,7 @@ var rename = require('gulp-rename');
 var sh = require('shelljs');
 var karma = require('karma').server;
 var uglify = require('gulp-uglify');
+var ngAnnotate = require('gulp-ng-annotate');
 
 var karmaConf = require('./karma.conf.js');
 var paths = {
@@ -22,6 +23,7 @@ gulp.task('dist', ['scripts']);
 gulp.task('scripts', function() {
   return gulp.src(['js/ionic.scroll.sista.js'])
     .pipe(concat('ionic.scroll.sista.js'))
+    .pipe(ngAnnotate({single_quotes: true}))
     .pipe(gulp.dest(paths.dist))
     .pipe(uglify())
     .pipe(rename({ extname: '.min.js' }))

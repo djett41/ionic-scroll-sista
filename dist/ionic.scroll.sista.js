@@ -3,9 +3,11 @@
   'use strict';
 
   angular.module('jett.ionic.scroll.sista', ['ionic'])
-    .directive('scrollSista', function($document, $ionicScrollDelegate) {
-      var TRANSITION_DURATION = '400ms';
-      var scaleHeaderElements = ionic.Platform.isAndroid() ? false : true;
+    .directive('scrollSista', ['$document', '$timeout', '$ionicScrollDelegate', function($document, $timeout, $ionicScrollDelegate) {
+        var TRANSITION_DELAY = 400;
+        var defaultDelay = TRANSITION_DELAY * 2;
+        var defaultDuration = TRANSITION_DELAY + 'ms';
+        var scaleHeaderElements = ionic.Platform.isAndroid() ? false : true;
 
       return {
         restrict: 'A',
@@ -37,8 +39,11 @@
            * @param duration
            */
           function translateY (element, y, duration) {
-            if (duration) {
+            if (duration && !element.style[ionic.CSS.TRANSITION_DURATION]) {
               element.style[ionic.CSS.TRANSITION_DURATION] = duration;
+              $timeout(function () {
+                element.style[ionic.CSS.TRANSITION_DURATION] = '';
+              }, defaultDelay, false);
             }
             element.style[ionic.CSS.TRANSFORM] = 'translate3d(0, ' + (-y) + 'px, 0)';
           }
@@ -211,7 +216,7 @@
             //if we are at the bottom, animate the header/tabs back in
             if (scrollView.getScrollMax().top - scrollTop <= contentTop) {
               y = 0;
-              duration = TRANSITION_DURATION;
+              duration = defaultDuration;
             }
 
             prevScrollTop = scrollTop;
@@ -227,6 +232,6 @@
 
         }
       }
-    });
+    }]);
 
 })(angular, ionic);
