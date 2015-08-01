@@ -29,6 +29,86 @@ angular.module('starter.services', [])
     name: 'Mike Harrington',
     lastText: 'This is wicked good ice cream.',
     face: 'https://pbs.twimg.com/profile_images/578237281384841216/R3ae1n61.png'
+  }, {
+    id: 5,
+    name: 'Adam Bradleyson',
+    lastText: 'I should buy a boat',
+    face: 'https://pbs.twimg.com/profile_images/479090794058379264/84TKj_qa.jpeg'
+  }, {
+    id: 6,
+    name: 'Perry Governor',
+    lastText: 'Look at my mukluks!',
+    face: 'https://pbs.twimg.com/profile_images/598205061232103424/3j5HUXMY.png'
+  }, {
+    id: 7,
+    name: 'Mike Harrington',
+    lastText: 'This is wicked good ice cream.',
+    face: 'https://pbs.twimg.com/profile_images/578237281384841216/R3ae1n61.png'
+  }, {
+    id: 8,
+    name: 'Adam Bradleyson',
+    lastText: 'I should buy a boat',
+    face: 'https://pbs.twimg.com/profile_images/479090794058379264/84TKj_qa.jpeg'
+  }, {
+    id: 9,
+    name: 'Mike Harrington',
+    lastText: 'This is wicked good ice cream.',
+    face: 'https://pbs.twimg.com/profile_images/578237281384841216/R3ae1n61.png'
+  }, {
+    id: 10,
+    name: 'Ben Sparrow',
+    lastText: 'You on your way?',
+    face: 'https://pbs.twimg.com/profile_images/514549811765211136/9SgAuHeY.png'
+  }, {
+    id: 11,
+    name: 'Max Lynx',
+    lastText: 'Hey, it\'s me',
+    face: 'https://avatars3.githubusercontent.com/u/11214?v=3&s=460'
+  }, {
+    id: 12,
+    name: 'Adam Bradleyson',
+    lastText: 'I should buy a boat',
+    face: 'https://pbs.twimg.com/profile_images/479090794058379264/84TKj_qa.jpeg'
+  }, {
+    id: 13,
+    name: 'Perry Governor',
+    lastText: 'Look at my mukluks!',
+    face: 'https://pbs.twimg.com/profile_images/598205061232103424/3j5HUXMY.png'
+  }, {
+    id: 14,
+    name: 'Mike Harrington',
+    lastText: 'This is wicked good ice cream.',
+    face: 'https://pbs.twimg.com/profile_images/578237281384841216/R3ae1n61.png'
+  }, {
+    id: 15,
+    name: 'Adam Bradleyson',
+    lastText: 'I should buy a boat',
+    face: 'https://pbs.twimg.com/profile_images/479090794058379264/84TKj_qa.jpeg'
+  }, {
+    id: 16,
+    name: 'Perry Governor',
+    lastText: 'Look at my mukluks!',
+    face: 'https://pbs.twimg.com/profile_images/598205061232103424/3j5HUXMY.png'
+  }, {
+    id: 17,
+    name: 'Mike Harrington',
+    lastText: 'This is wicked good ice cream.',
+    face: 'https://pbs.twimg.com/profile_images/578237281384841216/R3ae1n61.png'
+  }, {
+    id: 18,
+    name: 'Adam Bradleyson',
+    lastText: 'I should buy a boat',
+    face: 'https://pbs.twimg.com/profile_images/479090794058379264/84TKj_qa.jpeg'
+  }, {
+    id: 19,
+    name: 'Perry Governor',
+    lastText: 'Look at my mukluks!',
+    face: 'https://pbs.twimg.com/profile_images/598205061232103424/3j5HUXMY.png'
+  }, {
+    id: 20,
+    name: 'Mike Harrington',
+    lastText: 'This is wicked good ice cream.',
+    face: 'https://pbs.twimg.com/profile_images/578237281384841216/R3ae1n61.png'
   }];
 
   return {
