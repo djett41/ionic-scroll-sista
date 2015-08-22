@@ -1,6 +1,7 @@
 {
-  "name": "ionic-scroll-sista",
+  "name": "demo",
   "version": "1.0.0",
+  "author": "Devin Jett <djett41@gmail.com>",
   "description": "ionic-scroll-sista: A Demo for Ionic Scroll Sista",
   "dependencies": {},
   "devDependencies": {
