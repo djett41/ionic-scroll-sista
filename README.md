@@ -105,6 +105,11 @@ Ionic Scroll Sista includes the following behavior.
     - Any elements beneath the header, whether a subheader or top tabs, or top tabs AND a subheader, will slide
       to the very top of the screen
 
+### Snap option
+
+If you want the header to snap back if the user did not scroll far enough, add the attribute
+`scroll-sista-snap="true"` to your ion-content.
+
 ## NOTES
 
   1   When using subheaders, make sure you add ionic's `has-subheader` to your `ion-content` as described on the Ionic
