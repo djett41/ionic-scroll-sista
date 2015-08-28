@@ -3,11 +3,12 @@
   'use strict';
 
   angular.module('jett.ionic.scroll.sista', ['ionic'])
-    .directive('scrollSista', function($document, $timeout, $ionicScrollDelegate) {
-        var TRANSITION_DELAY = 400;
-        var defaultDelay = TRANSITION_DELAY * 2;
-        var defaultDuration = TRANSITION_DELAY + 'ms';
-        var scaleHeaderElements = ionic.Platform.isAndroid() ? false : true;
+    .directive('scrollSista', function($document, $timeout, $rootScope, $ionicScrollDelegate) {
+      var TRANSITION_DELAY = 400;
+      var defaultDelay = TRANSITION_DELAY * 2;
+      var defaultDuration = TRANSITION_DELAY + 'ms';
+      var scaleHeaderElements = ionic.Platform.isAndroid() ? false : true;
+      var isNavBarTransitioning = true;
 
       return {
         restrict: 'A',
@@ -133,7 +134,7 @@
            * @param duration
            */
           function translateHeaders (y, duration) {
-            var fadeAmt = 1 - (y / headerHeight);
+            var fadeAmt = Math.max(0, 1 - (y / headerHeight));
 
             //translate active header
             translateY(activeHeader, y, duration);
@@ -183,29 +184,40 @@
             });
           }
 
-          initCoordinates();
-
           //Need to reinitialize the values on refreshComplete or things will get out of wack
           $scope.$on('scroll.refreshComplete', function () {
             initCoordinates();
           });
 
-          //If the header/tabs aren't all the way in when the view leaves, place them back at 0
-          $scope.$parent.$on('$ionicView.leave', function () {
-            var top = $element[0].style.top;
-            if (top && top !== (contentTop + 'px')) {
-              translateElements(0);
-              initCoordinates();
+          /**
+           * Before the active view leaves, reset elements, and reset the scroll container
+           */
+          $scope.$parent.$on('$ionicView.beforeLeave', function () {
+            isNavBarTransitioning = true;
+            translateElements(0);
+
+            if (scrollDelegate) {
+              scrollDelegate.scrollTop();
             }
+          });
+
+          $scope.$parent.$on('$ionicView.afterEnter', function () {
+            initCoordinates();
+
+            // Ionic sets the active/cached nav-bar AFTER the afterEnter event is called, so we need to set a
+            // small timeout to let the nav-bar logic run.
+            $timeout(function () {
+              initElements();
+              isNavBarTransitioning = false;
+            }, 20, false);
           });
 
           /**
            * Called onScroll.  computes coordinates based on scroll position and translates accordingly
            */
           $element.bind('scroll', function (e) {
-            //Initializing onScroll prevents the race condition of active/cached headers not being correctly set in time
-            if (!cachedHeader || !activeHeader) {
-              initElements();
+            if (isNavBarTransitioning) {
+              return;
             }
 
             var duration = 0;
