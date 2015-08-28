@@ -84,6 +84,14 @@ Ionic Scroll Sista includes the following behavior.
     - For bottom tabs, the tabs and header will slide out of the scroll view at the same time.
     - If there is a subheader, the subheader will slide to the very top of the screen
 
+  - `scroll-sista="header-subheader"`
+    - For top tabs, the header will first slide out of the view, then the subheader will slide under the tabs
+    - For bottom tabs or no tabs, the header and subheader will slide out of the view together
+  
+  - `scroll-sista="subheader-header"`
+    - For top tabs, the subheader will first slide under the tabs, then the header will slide out of the view
+    - For bottom tabs or no tabs, the header and subheader will slide out of the view together (like header-subheader)
+  
   - `scroll-sista="tabs-subheader"`
     - For top tabs, the subheader will slide under the tabs, then the tabs will slide under the header.
     - For bottom tabs, the tabs and subheader will slide out of the scroll view at the same time.

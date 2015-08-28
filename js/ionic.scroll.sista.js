@@ -129,6 +129,14 @@
                 headerEnd = 0;
                 tabsEnd = 0;
                 break;
+              case 'header-subheader':
+                tabsEnd = hasTabsTop ? headerHeight : 0;
+                break;
+              case 'subheader-header':
+                headerStart = subHeaderHeight;
+                tabsStart = hasTabsTop ? subHeaderHeight : 0;
+                tabsEnd = hasTabsTop ? headerHeight : 0;
+                break;
               //defaults to header-tabs-subheader
               default:
                 headerStart = hasTabsTop ? contentTop - headerHeight : subHeaderHeight;
