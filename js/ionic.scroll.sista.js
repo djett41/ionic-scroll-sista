@@ -8,11 +8,11 @@
       var defaultDelay = TRANSITION_DELAY * 2;
       var defaultDuration = TRANSITION_DELAY + 'ms';
       var scaleHeaderElements = ionic.Platform.isAndroid() ? false : true;
-      var isNavBarTransitioning = true;
 
       return {
         restrict: 'A',
         link: function($scope, $element, $attr) {
+          var isNavBarTransitioning = true;
           var body = $document[0].body;
           var scrollDelegate = $attr.delegateHandle ? $ionicScrollDelegate.$getByHandle($attr.delegateHandle) : $ionicScrollDelegate;
           var scrollView = scrollDelegate.getScrollView();
@@ -59,17 +59,25 @@
           }
 
           /**
-           * Initializes headers, tabs, and subheader, and determines how they will transition on scroll
+           * Initializes active/cached headers
            */
-          function initElements () {
+          function initHeaders () {
             cachedHeader = body.querySelector('[nav-bar="cached"] .bar-header');
             activeHeader = body.querySelector('[nav-bar="active"] .bar-header');
+          }
 
-            if (!activeHeader) {
+          /**
+           * Initializes tabs, and subheaders, and determines how they will transition on scroll
+           */
+          (function init () {
+            //active/cached headers won't be accurately set yet.  Just get any header so we can get the header height
+            var anyHeader = body.querySelector('[nav-bar] .bar-header');
+
+            if (!anyHeader) {
               return;
             }
 
-            headerHeight = activeHeader.offsetHeight;
+            headerHeight = anyHeader.offsetHeight;
             contentTop = headerHeight;
 
             //tabs
@@ -126,7 +134,7 @@
                 headerStart = hasTabsTop ? contentTop - headerHeight : subHeaderHeight;
                 tabsStart = hasTabsTop ? subHeaderHeight : 0;
             }
-          }
+          })();
 
           /**
            * Translates active and cached headers, and animates active children
@@ -207,7 +215,7 @@
             // Ionic sets the active/cached nav-bar AFTER the afterEnter event is called, so we need to set a
             // small timeout to let the nav-bar logic run.
             $timeout(function () {
-              initElements();
+              initHeaders();
               isNavBarTransitioning = false;
             }, 20, false);
           });
