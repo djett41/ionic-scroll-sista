@@ -9,6 +9,20 @@
       var defaultDuration = TRANSITION_DELAY + 'ms';
       var scaleHeaderElements = ionic.Platform.isAndroid() ? false : true;
 
+      function getParentWithAttr (e, attrName, attrValue, depth) {
+        var attr;
+
+        depth = depth || 10;
+        while (e.parentNode && depth--) {
+          attr = e.parentNode.getAttribute(attrName);
+          if (attr && attr === attrValue) {
+            return e.parentNode;
+          }
+          e = e.parentNode;
+        }
+        return null;
+      }
+
       return {
         restrict: 'A',
         link: function($scope, $element, $attr) {
@@ -59,29 +73,24 @@
           }
 
           /**
-           * Initializes active/cached headers
+           * Initializes headers, tabs, and subheaders, and determines how they will transition on scroll
            */
-          function initHeaders () {
+          function init () {
+            var activeView;
+
             cachedHeader = body.querySelector('[nav-bar="cached"] .bar-header');
             activeHeader = body.querySelector('[nav-bar="active"] .bar-header');
-          }
 
-          /**
-           * Initializes tabs, and subheaders, and determines how they will transition on scroll
-           */
-          (function init () {
-            //active/cached headers won't be accurately set yet.  Just get any header so we can get the header height
-            var anyHeader = body.querySelector('[nav-bar] .bar-header');
-
-            if (!anyHeader) {
+            if (!activeHeader) {
               return;
             }
 
-            headerHeight = anyHeader.offsetHeight;
+            headerHeight = activeHeader.offsetHeight;
             contentTop = headerHeight;
 
-            //tabs
-            tabs = body.querySelector('.tabs');
+            //since some people can have nested tabs, get the last tabs
+            tabs = body.querySelectorAll('.tabs');
+            tabs = tabs[tabs.length - 1];
             if (tabs) {
               tabsHeight = tabs.offsetHeight;
               if (tabs.parentNode.classList.contains('tabs-top')) {
@@ -93,7 +102,9 @@
             }
 
             //subheader
-            subHeader = body.querySelector('.bar-subheader');
+            //since subheader is going to be nested in the active view, get the closest active view from $element and
+            activeView = getParentWithAttr($element[0], 'nav-view', 'active');
+            subHeader = activeView.querySelector('.bar-subheader');
             if (subHeader) {
               subHeaderHeight = subHeader.offsetHeight;
               contentTop += subHeaderHeight;
@@ -142,7 +153,7 @@
                 headerStart = hasTabsTop ? contentTop - headerHeight : subHeaderHeight;
                 tabsStart = hasTabsTop ? subHeaderHeight : 0;
             }
-          })();
+          }
 
           /**
            * Translates active and cached headers, and animates active children
@@ -211,19 +222,26 @@
           $scope.$parent.$on('$ionicView.beforeLeave', function () {
             isNavBarTransitioning = true;
             translateElements(0);
+          });
 
+          /**
+           * Scroll to the top when entering to reset then scrollView scrollTop. (prevents jumping)
+           */
+          $scope.$parent.$on('$ionicView.beforeEnter', function () {
             if (scrollDelegate) {
               scrollDelegate.scrollTop();
             }
           });
 
+          /**
+           * Ionic sets the active/cached nav-bar AFTER the afterEnter event is called, so we need to set a small
+           * timeout to let the nav-bar logic run.
+           */
           $scope.$parent.$on('$ionicView.afterEnter', function () {
             initCoordinates();
 
-            // Ionic sets the active/cached nav-bar AFTER the afterEnter event is called, so we need to set a
-            // small timeout to let the nav-bar logic run.
             $timeout(function () {
-              initHeaders();
+              init();
               isNavBarTransitioning = false;
             }, 20, false);
           });
