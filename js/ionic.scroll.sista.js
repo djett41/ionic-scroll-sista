@@ -176,38 +176,49 @@
           }
 
           /**
-           * Translates header and/or tabs elements and resets content top and/or bottom
+           * Translates header, tabs, subheader elements and resets content top and/or bottom
+           * When the active view leaves, we need sync functionality to reset headers and clear
            * @param y
            * @param duration
            */
-          function translateElements (y, duration) {
+          function translateElementsSync (y, duration) {
             var contentStyle = $element[0].style;
             var headerY = y > headerStart ? y - headerStart : 0;
             var tabsY, subheaderY;
 
+            //subheader
+            if (subHeader) {
+              subheaderY =  y > subheaderStart ? y - subheaderStart : 0;
+              translateY(subHeader, Math.min(subheaderEnd, subheaderY), duration);
+            }
+
+            //tabs
+            if (tabs) {
+              tabsY = Math.min(tabsEnd, y > tabsStart ? y - tabsStart : 0);
+
+              if (hasTabsBottom) {
+                tabsY = -tabsY;
+                contentStyle.bottom = Math.max(0, tabsHeight - y) + 'px';
+              }
+              translateY(tabs, tabsY, duration);
+            }
+
+            //headers
+            translateHeaders(Math.min(headerEnd, headerY), duration);
+
+            //readjust top of ion-content
+            contentStyle.top = Math.max(0, contentTop - y) + 'px';
+          }
+
+          /**
+           * Translates header, tabs, subheader elements and resets content top and/or bottom
+           * Wraps translate functionality in an animation frame request
+           * @param y
+           * @param duration
+           */
+          function translateElements (y, duration) {
             ionic.requestAnimationFrame(function() {
-              //subheader
-              if (subHeader) {
-                subheaderY =  y > subheaderStart ? y - subheaderStart : 0;
-                translateY(subHeader, Math.min(subheaderEnd, subheaderY), duration);
-              }
-
-              //tabs
-              if (tabs) {
-                tabsY = Math.min(tabsEnd, y > tabsStart ? y - tabsStart : 0);
-
-                if (hasTabsBottom) {
-                  tabsY = -tabsY;
-                  contentStyle.bottom = Math.max(0, tabsHeight - y) + 'px';
-                }
-                translateY(tabs, tabsY, duration);
-              }
-
-              //headers
-              translateHeaders(Math.min(headerEnd, headerY), duration);
-
-              //readjust top of ion-content
-              contentStyle.top = Math.max(0, contentTop - y) + 'px';
+              translateElementsSync(y, duration);
             });
           }
 
@@ -221,7 +232,9 @@
            */
           $scope.$parent.$on('$ionicView.beforeLeave', function () {
             isNavBarTransitioning = true;
-            translateElements(0);
+            translateElementsSync(0);
+            activeHeader = null;
+            cachedHeader = null;
           });
 
           /**
