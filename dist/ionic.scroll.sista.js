@@ -104,7 +104,7 @@
             //subheader
             //since subheader is going to be nested in the active view, get the closest active view from $element and
             activeView = getParentWithAttr($element[0], 'nav-view', 'active');
-            subHeader = activeView.querySelector('.bar-subheader');
+            subHeader = activeView && activeView.querySelector('.bar-subheader');
             if (subHeader) {
               subHeaderHeight = subHeader.offsetHeight;
               contentTop += subHeaderHeight;
@@ -164,15 +164,20 @@
             var fadeAmt = Math.max(0, 1 - (y / headerHeight));
 
             //translate active header
-            translateY(activeHeader, y, duration);
-            angular.forEach(activeHeader.children, function (child) {
-              child.style.opacity = fadeAmt;
-              if (scaleHeaderElements) {
-                child.style[ionic.CSS.TRANSFORM] = 'scale(' + fadeAmt + ',' + fadeAmt + ')';
-              }
-            });
+            if (activeHeader) {
+              translateY(activeHeader, y, duration);
+              angular.forEach(activeHeader.children, function (child) {
+                child.style.opacity = fadeAmt;
+                if (scaleHeaderElements) {
+                  child.style[ionic.CSS.TRANSFORM] = 'scale(' + fadeAmt + ',' + fadeAmt + ')';
+                }
+              });
+            }
+
             //translate cached header
-            translateY(cachedHeader, y, duration);
+            if (cachedHeader) {
+              translateY(cachedHeader, y, duration);
+            }
           }
 
           /**
@@ -241,8 +246,8 @@
            * Scroll to the top when entering to reset then scrollView scrollTop. (prevents jumping)
            */
           $scope.$parent.$on('$ionicView.beforeEnter', function () {
-            if (scrollDelegate) {
-              scrollDelegate.scrollTop();
+            if (scrollView) {
+              scrollView.scrollTo(0, 0);
             }
           });
 
@@ -266,6 +271,8 @@
             if (isNavBarTransitioning) {
               return;
             }
+            //support for jQuery event as well
+            e = e.originalEvent || e;
 
             var duration = 0;
             var scrollTop = e.detail.scrollTop;
