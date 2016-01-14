@@ -10,6 +10,12 @@
 
 ## Demo
 
+- Download my app SportScoop on iOS/Android to see it live!!
+
+[Web Demo](http://www.sportscoopapp.com) <br>
+[iOS](https://itunes.apple.com/us/app/sportscoop/id1035164619?mt=8) <br>
+[Android](https://play.google.com/store/apps/details?id=com.coseur.sportscoop)
+
 - Watch the Demo video below
 
 [![Ionic Scroll Sista](http://img.youtube.com/vi/x3Htocx4acc/0.jpg)](http://www.youtube.com/watch?v=x3Htocx4acc)
