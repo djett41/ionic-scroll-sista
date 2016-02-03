@@ -76,10 +76,13 @@
            * Initializes headers, tabs, and subheaders, and determines how they will transition on scroll
            */
           function init () {
-            var activeView;
+            var activeView, sideMenu, parent;
 
-            cachedHeader = body.querySelector('[nav-bar="cached"] .bar-header');
-            activeHeader = body.querySelector('[nav-bar="active"] .bar-header');
+            // detect ion-side-menu and support
+            sideMenu = body.querySelector('ion-side-menu-content');
+            parent = sideMenu ? sideMenu : body;
+            cachedHeader = parent.querySelector('[nav-bar="cached"] .bar-header');
+            activeHeader = parent.querySelector('[nav-bar="active"] .bar-header');
 
             if (!activeHeader) {
               return;
@@ -275,7 +278,8 @@
             e = e.originalEvent || e;
 
             var duration = 0;
-            var scrollTop = e.detail.scrollTop;
+            // support native scroll
+            var scrollTop = scrollView.isNative ? e.currentTarget.scrollTop : e.detail.scrollTop;
 
             y = scrollTop >= 0 ? Math.min(defaultEnd, Math.max(0, y + scrollTop - prevScrollTop)) : 0;
 
