@@ -1,4 +1,4 @@
-#Ionic Scroll Sista
+# Ionic Scroll Sista
 >An Ionic plugin that will hide your header and tabs while scrolling a list to give users a little more room.  This plugin was inspired by [Ionic Header Shrink](https://github.com/driftyco/ionic-ion-header-shrink) however it doesn't seem that the repo is still maintained, not to mention it doesn't support the breaking changes from Ionic beta-14.
 
 ## Table of Contents
